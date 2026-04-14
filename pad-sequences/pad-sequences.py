@@ -6,16 +6,15 @@ def pad_sequences(seqs, pad_value=0, max_len=None):
       N = len(seqs)
       L = max_len if provided else max(len(seq) for seq in seqs) or 0
     """
+    if len(seqs) == 0:
+        return np.array([])
     if max_len is None:
-        max_len = len(max(seqs, key=len))
-    seqs = np.array(seqs, dtype=object)
+        max_len = max(len(seq) for seq in seqs)
 
-    for i in range(len(seqs)):
-        length = len(seqs[i])
-        if length < max_len:
-            add = [pad_value]*(max_len-length)
-            seqs[i] = seqs[i] + add
-        else:
-            seqs[i] = seqs[i][:max_len]
+    output = np.full((len(seqs),max_len),pad_value)
 
-    return np.array(seqs)
+    for i,seq in enumerate(seqs):
+        length = min(len(seq),max_len)
+        output[i, :length] = seq[:length]
+
+    return output
