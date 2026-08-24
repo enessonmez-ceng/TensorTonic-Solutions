@@ -4,18 +4,19 @@ def tensor_op(x, y, op):
     """
     Returns: list (result tensor converted via .tolist())
     """
-    x = torch.tensor(x,dtype=torch.float32)
-    y = torch.tensor(y,dtype=torch.float32)
+    x_t = torch.tensor(x,dtype=torch.float32)
+    y_t = torch.tensor(y,dtype=torch.float32)
 
-    if op == "add":
-        return (x+y).tolist()
-    elif op == "multiply":
-        return (x*y).tolist()
-    elif op == "matmul":
-        return (x@y).tolist()
-    elif op == "power":
-        return (x**y).tolist()
-    elif op == "max":
-        return torch.max(x,y).tolist()
-    else:
-        return "Invalid operations"
+    operations = {
+        "add": torch.add,
+        "multiply": torch.mul,
+        "matmul": torch.matmul,
+        "power": torch.pow,
+        "max": torch.max
+    }
+
+    if op not in operations:
+        raise ValueError(f"Invalid operation: '{op}'. Must be: {list(operations.keys())}")
+
+    result = operations[op](x_t,y_t)
+    return result.tolist()
