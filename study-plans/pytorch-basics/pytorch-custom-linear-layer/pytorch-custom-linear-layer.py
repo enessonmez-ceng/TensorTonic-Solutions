@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import math
 
 class CustomLinear(nn.Module):
     """
@@ -10,6 +11,7 @@ class CustomLinear(nn.Module):
         super().__init__()
         self.weight = nn.Parameter(torch.empty(out_features,in_features))
         self.bias = nn.Parameter(torch.empty(out_features))
+        nn.init.kaiming_uniform_(self.weight , a = math.sqrt(5))
+        torch.nn.init.zeros_(self.bias)
     def forward(self, x):
-        torch.nn.init.kaiming_uniform_
         return x @ self.weight.T + self.bias
